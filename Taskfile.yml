@@ -1,0 +1,23 @@
+version: '3'
+
+dotenv: [ '.config/default.env' ]
+
+env:
+  PROTOBUF_PATH: proto
+  PROTOBUF_PATH_GENERATED: gen/service
+
+tasks:
+  proto:
+    cmds:
+      - protoc -I${PROTOBUF_PATH} --go_out=${PROTOBUF_PATH_GENERATED} --go-grpc_out=require_unimplemented_servers=false:${PROTOBUF_PATH_GENERATED} ${PROTOBUF_PATH}/*.proto
+      - protoc-go-inject-tag -input="${PROTOBUF_PATH_GENERATED}/*.pb.go"
+
+  mod:
+    cmds:
+      - go get ./...
+      - go mod tidy
+
+  build:
+    cmds:
+      - task: proto
+      - task: mod

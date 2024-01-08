@@ -1,0 +1,28 @@
+syntax = "proto3";
+option go_package = ".;proto";
+package proto;
+import "google/protobuf/empty.proto";
+
+
+service SpeechToText {
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc SpeechToText(SpeechToTextRequest) returns (SpeechToTextResponse);
+}
+
+message ConvertAudioRequest {
+    string sourceExtension = 1;
+    string targetExtension = 2;
+    bytes data = 3;
+  }
+  
+message ConvertAudioResponse {
+    bytes data = 2;
+}
+
+message SpeechToTextRequest {
+    string sourceExtension = 1;
+    bytes data = 2;
+}
+ message SpeechToTextResponse {
+    string text = 1;
+ }
