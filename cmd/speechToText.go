@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"os"
+	"os/signal"
 
 	"github.com/func-it/speechToText/cmd/service"
 	"github.com/func-it/speechToText/cmd/tool"
@@ -14,8 +15,21 @@ import (
 const version = "0.0.1"
 
 func Exec() {
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	rootCmd := NewRootCmd(ctx)
+
+	// Set up a channel to receive SIGINT.
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+
+	go func() {
+		for range c {
+			cancel()
+			break
+		}
+	}()
 
 	if err := rootCmd.ExecuteContext(ctx); err != nil {
 		os.Exit(1)

@@ -5,6 +5,9 @@ dotenv: [ '.config/default.env' ]
 env:
   PROTOBUF_PATH: proto
   PROTOBUF_PATH_GENERATED: gen/service
+  DOCKER_REGISTRY: funcit
+  DOCKER_IMAGE: speechtotext
+  DOCKER_TAG: latest
 
 tasks:
   proto:
@@ -21,3 +24,14 @@ tasks:
     cmds:
       - task: proto
       - task: mod
+
+  build-docker:
+    cmds:
+      - docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG} .
+
+  services-up:
+    cmds:
+      - docker compose
+        -f infra/docker-compose.yml
+        --env-file .config/default.env
+        up speechToText

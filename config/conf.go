@@ -7,10 +7,10 @@ import (
 )
 
 type Conf struct {
-	Services *Services
-	OpenAi   *OpenAi
-	Verbose  logi.EnumVerbose
-	Config   string
+	Services *Services        `yaml:"services"`
+	OpenAi   *OpenAi          `yaml:"openai"`
+	Verbose  logi.EnumVerbose `yaml:"verbose"`
+	Config   string           `yaml:"config"`
 }
 
 func New() *Conf {
@@ -27,7 +27,7 @@ type OpenAi struct {
 }
 
 type Services struct {
-	SpeechToText *Service
+	SpeechToText *Service `yaml:"speechToText"`
 }
 
 func NewService() *Service {
@@ -37,12 +37,12 @@ func NewService() *Service {
 }
 
 type Service struct {
-	GRPC *GRPC
+	GRPC *GRPC `yaml:"grpc"`
 }
 
 type GRPC struct {
-	Host string
-	Port int
+	Host string `yaml:"host"`
+	Port int    `yaml:"port"`
 }
 
 func (g *GRPC) Addr() string {

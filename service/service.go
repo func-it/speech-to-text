@@ -1,4 +1,4 @@
-package audioConverter
+package speechToText
 
 import (
 	"context"
@@ -15,6 +15,8 @@ func RunService(ctx context.Context, openaiToken, listenAddress string) error {
 	if err != nil {
 		return logi.ErrorNReturn(err)
 	}
+
+	logi.Infof("speecToTextService is initialized")
 
 	listener, err := net.Listen("tcp", listenAddress)
 	if err != nil {

@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  speechToText:
+    container_name: ${PROJECT}-whatsapp
+    image: golang:latest
+    restart: on-failure
+    networks:
+      - speakeasy
+    working_dir: ${PROJECT_DIR}
+    ports:
+      - ${SERVICES_WHATSAPP_GRPC_PORT}:${SERVICES_WHATSAPP_GRPC_PORT}
+    command: go run . service whatsapp -v debug
+    environment:
+      OPENAI_APIKEY: ${OPENAI_APIKEY}
+
+networks:
+  speakeasy:
+    name: ${PROJECT}-speakeasy
