@@ -5,9 +5,10 @@ import (
 	"log"
 	"net"
 
-	proto "github.com/func-it/speechToText/gen/service"
-	"github.com/func-it/speechToText/pkg/logi"
 	"google.golang.org/grpc"
+
+	"github.com/func-it/go/logi"
+	"github.com/func-it/go/proto"
 )
 
 func RunService(ctx context.Context, openaiToken, listenAddress string) error {

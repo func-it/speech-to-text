@@ -26,7 +26,7 @@ func NewSpeechToText(openAIToken string) *SpeechToText {
 func (s *SpeechToText) GetTextFromMp3AudioMessage(ctx context.Context, rawAudio io.Reader) (string, error) {
 	response, err := s.openAIClient.CreateTranscription(ctx, openai.AudioRequest{
 		Model:    openai.Whisper1,
-		FilePath: "audio.mp3", // Required in both cases, even if you use reader, but the file does not have to exist
+		FilePath: "audio.mp3", // Required in orchestratorh cases, even if you use reader, but the file does not have to exist
 		Reader:   rawAudio,
 		// Prompt:      "",
 		Temperature: 0,

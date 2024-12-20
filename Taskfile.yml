@@ -1,37 +1,13 @@
 version: '3'
 
-dotenv: [ '.config/default.env' ]
-
-env:
-  PROTOBUF_PATH: proto
-  PROTOBUF_PATH_GENERATED: gen/service
-  DOCKER_REGISTRY: funcit
-  DOCKER_IMAGE: speechtotext
-  DOCKER_TAG: latest
-
 tasks:
-  proto:
-    cmds:
-      - protoc -I${PROTOBUF_PATH} --go_out=${PROTOBUF_PATH_GENERATED} --go-grpc_out=require_unimplemented_servers=false:${PROTOBUF_PATH_GENERATED} ${PROTOBUF_PATH}/*.proto
-      - protoc-go-inject-tag -input="${PROTOBUF_PATH_GENERATED}/*.pb.go"
-
-  mod:
-    cmds:
-      - go get ./...
-      - go mod tidy
-
   build:
+    desc: Build the speech to text binary
     cmds:
-      - task: proto
-      - task: mod
+      - go build --ldflags '-extldflags "-static" -w -s' -mod=readonly -o ./speech-to-text -tags netgo .
 
-  build-docker:
+  docker:
+    desc: Build speechtotext docker image and publish to gchr.io
     cmds:
-      - docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG} .
+      - docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/func-it/speech-to-text:latest .
 
-  services-up:
-    cmds:
-      - docker compose
-        -f infra/docker-compose.yml
-        --env-file .config/default.env
-        up speechToText

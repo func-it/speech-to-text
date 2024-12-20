@@ -5,13 +5,15 @@ import (
 	"context"
 	"strings"
 
-	types "github.com/func-it/speechToText/gen/service"
-	"github.com/func-it/speechToText/pkg/audioConverter"
-	"github.com/func-it/speechToText/pkg/logi"
-	speechtotext "github.com/func-it/speechToText/pkg/speechToText"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
+
+	"github.com/func-it/go/logi"
+	types "github.com/func-it/go/proto"
+	"github.com/func-it/speech-to-text/pkg/audioConverter"
+	"github.com/func-it/speech-to-text/pkg/format"
+	speechtotext "github.com/func-it/speech-to-text/pkg/speechToText"
 )
 
 type SpeechToTextService struct {
@@ -36,7 +38,7 @@ func (a *SpeechToTextService) Ping(_ context.Context, empty *emptypb.Empty) (*em
 }
 
 func (a *SpeechToTextService) SpeechToText(ctx context.Context, req *types.SpeechToTextRequest) (*types.SpeechToTextResponse, error) {
-	// XXX TODO : Add validation in proto file
+	// XXX TODO : AddCandidates validation in proto file
 	rawAudio := req.Data
 	sourceExtension := strings.ToLower(req.GetSourceExtension())
 
@@ -44,13 +46,13 @@ func (a *SpeechToTextService) SpeechToText(ctx context.Context, req *types.Speec
 		return nil, logi.ErrorNReturn(status.Errorf(codes.FailedPrecondition, "raw audio is empty"))
 	}
 
-	if sourceExtension != "oga" {
-		return nil, logi.ErrorNReturn(status.Errorf(codes.FailedPrecondition, "source extension is not oga"))
+	if sourceExtension != format.FfmpegInputFormat {
+		return nil, logi.ErrorNReturn(status.Errorf(codes.FailedPrecondition, "source extension is not %s", format.FfmpegInputFormat))
 	}
 
 	rawAudioReader := bytes.NewReader(rawAudio)
 
-	rawAudioConvertedReader, err := audioConverter.ConvertAudio(ctx, rawAudioReader, sourceExtension, "mp3")
+	rawAudioConvertedReader, err := audioConverter.ConvertAudio(ctx, rawAudioReader, sourceExtension, format.FfmpegOutputFormat)
 	if err != nil {
 		return nil, logi.ErrorfNWrapNReturn(err, "cannot convert audio : %v", err)
 	}

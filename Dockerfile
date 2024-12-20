@@ -1,21 +1,51 @@
-FROM golang:1.21
+# syntax=docker/dockerfile:1
 
-# Update package list and install ffmpeg
-RUN apt-get update && apt-get install -y ffmpeg
+FROM --platform=${BUILDPLATFORM:-linux/arm64} tonistiigi/xx AS xx
 
-ENV APP_HOME /app
+FROM --platform=${BUILDPLATFORM:-linux/arm64} golang:1.23.2-alpine3.19 AS builder
 
-RUN mkdir -p "$APP_HOME"
+COPY --from=xx / /
 
-COPY . "/app"
+RUN apk add --no-cache \
+    bash \
+    curl \
+    ffmpeg \
+    netcat-openbsd \
+    git
 
-# Set the Current Working Directory inside the container
-WORKDIR "$APP_HOME"
+# Install Taskfile
+RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d v3.40.0
 
-# Build the binary
-RUN go mod tidy && go build -o speech_to_text 
+WORKDIR /app
 
-#Exposing port 12007
-EXPOSE 12007
+COPY ./go.mod ./go.sum ./
 
-CMD ["./speech_to_text", "service", "speechToText"]
+ARG TARGETPLATFORM
+ARG CGO_ENABLED=0
+
+RUN --mount=type=cache,id=build-cache,target=/root/.cache/go-build \
+    go mod download -x \
+    && go mod verify \
+    && go install ./... \
+    && go install golang.org/x/tools/cmd/goimports@latest
+
+COPY / .
+RUN --mount=type=cache,id=build-cache,target=/root/.cache/go-build \
+    xx-go --wrap \
+    && task speech-to-text-build \
+    && xx-verify /app/speech-to-text
+
+FROM alpine:3.19
+RUN apk add --no-cache \
+    ffmpeg \
+    netcat-openbsd \
+    bash
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY --from=builder /app/speech-to-text .
+
+LABEL org.opencontainers.image.source="https://github.com/func-it/speech-to-text"
+
+CMD ["./speech-to-text"]

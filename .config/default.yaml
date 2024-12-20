@@ -1,7 +1,0 @@
-verbose: info
-services:
-  speechToText:
-    grpc:
-      host: speechToText
-      port: 12007
-    
