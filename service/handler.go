@@ -43,7 +43,7 @@ func (a *SpeechToTextService) SpeechToText(ctx context.Context, req *types.Speec
 	sourceExtension := strings.ToLower(req.GetSourceExtension())
 
 	if len(rawAudio) == 0 {
-		return nil, logi.ErrorNReturn(status.Errorf(codes.FailedPrecondition, "raw audio is empty"))
+		return nil, logi.ErrorNReturn(status.Errorf(codes.FailedPrecondition, "raw audio is empty..."))
 	}
 
 	if sourceExtension != format.FfmpegInputFormat {

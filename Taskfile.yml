@@ -1,13 +1,18 @@
 version: '3'
 
 tasks:
-  build:
-    desc: Build the speech to text binary
-    cmds:
-      - go build --ldflags '-extldflags "-static" -w -s' -mod=readonly -o ./speech-to-text -tags netgo .
-
-  docker:
+  docker-push:
     desc: Build speechtotext docker image and publish to gchr.io
     cmds:
-      - docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/func-it/speech-to-text:latest .
+      - DOCKER_BUILDKIT=1 docker buildx build --ssh=default --platform linux/amd64,linux/arm64 -t ghcr.io/func-it/speech-to-text:latest .
+      - docker push ghcr.io/func-it/speech-to-text:latest
 
+  upgrade:
+    cmds:
+      - task: docker-push
+      - task: staging:upgrade
+
+includes:
+  staging:
+    taskfile: ./Taskfile.staging.yml
+    dir: .

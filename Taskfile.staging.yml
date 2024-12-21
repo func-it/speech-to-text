@@ -1,0 +1,12 @@
+version: "3"
+
+vars:
+
+tasks:
+  upgrade:
+    cmds:
+      - task: remote-upgrade
+
+  remote-upgrade:
+    desc: SSH into the staging server and upgrade the speech-to-text service
+    cmd: ssh ubuntu@staging.com 'cd ~/plum && task upgrade-speech-to-text'
