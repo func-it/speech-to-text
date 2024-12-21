@@ -14,18 +14,14 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-# Set GOPRIVATE to let go know which repos are private
 ENV GOPRIVATE=github.com/func-it/*
 
-# Configure known_hosts for SSH access to GitHub
 RUN mkdir -p ~/.ssh && \
     chmod 700 ~/.ssh && \
     ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-# Copy only the go.mod and go.sum initially to leverage layer caching
 COPY go.mod go.sum ./
 
-# Use SSH mount so go mod download can access private repos
 RUN --mount=type=ssh \
     git config --global url."git@github.com:".insteadOf "https://github.com/" && \
     go mod download -x && \
@@ -33,10 +29,8 @@ RUN --mount=type=ssh \
     go install ./... && \
     go install golang.org/x/tools/cmd/goimports@latest
 
-# Copy the rest of the source code
 COPY . .
 
-# Build the binary using Taskfile
 RUN --mount=type=cache,id=build-cache,target=/root/.cache/go-build \
     xx-go --wrap && \
     go build --ldflags '-extldflags "-static" -w -s' -mod=readonly -o ./speech-to-text -tags netgo . && \
