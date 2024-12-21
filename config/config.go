@@ -9,6 +9,7 @@ import (
 type Conf struct {
 	OpenAIApiKey string `env:"LLMS_OPENAI_APIKEY,required=true"`
 	GrpcPort     int    `env:"SERVICES_SPEECHTOTEXT_GRPC_ADDRESS,default=12007"`
+	Environment  string `env:"ENVIRONMENT,default=prod"`
 }
 
 func (c Conf) GetAddress() string {

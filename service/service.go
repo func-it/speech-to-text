@@ -17,7 +17,7 @@ func RunService(ctx context.Context, openaiToken, listenAddress string) error {
 		return logi.ErrorNReturn(err)
 	}
 
-	logi.Infof("speecToTextService is initialized")
+	logi.Infof("speech-to-text is initialized")
 
 	listener, err := net.Listen("tcp", listenAddress)
 	if err != nil {
@@ -28,6 +28,7 @@ func RunService(ctx context.Context, openaiToken, listenAddress string) error {
 	proto.RegisterSpeechToTextServer(server, speechToTextService)
 	go func() {
 		logi.Infof("listening on %s", listenAddress)
+		logi.ServerIsReady("speech-to-text")
 		if err := server.Serve(listener); err != nil {
 			log.Fatalf("failed to serve: %v", err)
 		}
