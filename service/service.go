@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/func-it/go/logi"
-	"github.com/func-it/go/proto"
+	"github.com/func-it/go/types"
 )
 
 func RunService(ctx context.Context, openaiToken, listenAddress string) error {
@@ -25,7 +25,7 @@ func RunService(ctx context.Context, openaiToken, listenAddress string) error {
 	}
 
 	server := grpc.NewServer()
-	proto.RegisterSpeechToTextServer(server, speechToTextService)
+	types.RegisterSpeechToTextServer(server, speechToTextService)
 	go func() {
 		logi.Infof("listening on %s", listenAddress)
 		logi.ServerIsReady("speech-to-text")

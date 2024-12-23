@@ -4,8 +4,9 @@ tasks:
   docker-push:
     desc: Build speechtotext docker image and publish to gchr.io
     cmds:
+      - go mod tidy
       - DOCKER_BUILDKIT=1 docker buildx build --ssh=default --platform linux/amd64,linux/arm64 -t ghcr.io/func-it/speech-to-text:latest .
-      - docker push ghcr.io/func-it/speech-to-text:latest
+#      - docker push ghcr.io/func-it/speech-to-text:latest
 
   upgrade:
     cmds:

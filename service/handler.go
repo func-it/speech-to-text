@@ -10,7 +10,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/func-it/go/logi"
-	types "github.com/func-it/go/proto"
+	"github.com/func-it/go/types"
 	"github.com/func-it/speech-to-text/pkg/audioConverter"
 	"github.com/func-it/speech-to-text/pkg/format"
 	speechtotext "github.com/func-it/speech-to-text/pkg/speechToText"

@@ -23,6 +23,8 @@ RUN mkdir -p ~/.ssh && \
 COPY go.mod go.sum ./
 
 RUN --mount=type=ssh \
+    --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
     git config --global url."git@github.com:".insteadOf "https://github.com/" && \
     go mod download -x && \
     go mod verify && \
@@ -31,7 +33,9 @@ RUN --mount=type=ssh \
 
 COPY . .
 
-RUN --mount=type=cache,id=build-cache,target=/root/.cache/go-build \
+RUN --mount=type=ssh \
+    --mount=type=cache,id=build-cache,target=/root/.cache/go-build \
+    --mount=type=cache,id=go-mod-cache,target=/go/pkg/mod \
     xx-go --wrap && \
     go build --ldflags '-extldflags "-static" -w -s' -mod=readonly -o ./speech-to-text -tags netgo . && \
     xx-verify /app/speech-to-text
