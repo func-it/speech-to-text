@@ -10,6 +10,7 @@ tasks:
   docker-push:
     desc: Build speechtotext docker image and publish to gchr.io
     cmds:
+      - task: docker
       - docker push ghcr.io/func-it/speech-to-text:latest
 
   upgrade:
