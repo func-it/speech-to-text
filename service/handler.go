@@ -13,7 +13,7 @@ import (
 	"github.com/func-it/go/types"
 	"github.com/func-it/speech-to-text/pkg/audioConverter"
 	"github.com/func-it/speech-to-text/pkg/format"
-	speechtotext "github.com/func-it/speech-to-text/pkg/speechToText"
+	"github.com/func-it/speech-to-text/pkg/speechtotext"
 )
 
 type SpeechToTextService struct {
