@@ -3,7 +3,7 @@ package test
 import (
 	"context"
 	"fmt"
-	"github.com/func-it/go/types"
+	"github.com/func-it/go/protos"
 	"os"
 	"testing"
 	"time"
@@ -27,7 +27,7 @@ func TestService(t *testing.T) {
 		t.Error(err)
 	}
 
-	client := types.NewSpeechToTextClient(conn)
+	client := protos.NewSpeechToTextClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
@@ -37,7 +37,7 @@ func TestService(t *testing.T) {
 		t.Fatalf("cannot read input test file: %v", err)
 	}
 
-	response, err := client.SpeechToText(ctx, &types.SpeechToTextRequest{
+	response, err := client.SpeechToText(ctx, &protos.SpeechToTextRequest{
 		SourceExtension: "oga",
 		Data:            rawData,
 	})

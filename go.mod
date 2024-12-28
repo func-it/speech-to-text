@@ -5,13 +5,13 @@ go 1.23.2
 require (
 	github.com/Netflix/go-env v0.1.2
 	github.com/fatih/color v1.18.0
-	github.com/func-it/go v0.0.0-20241223020906-f059a36296dd
+	github.com/func-it/go v0.0.0-20241228140635-bbd94282c9bb
 	github.com/ghodss/yaml v1.0.0
 	github.com/pterm/pterm v0.12.80
-	github.com/sashabaranov/go-openai v1.36.0
+	github.com/sashabaranov/go-openai v1.36.1
 	github.com/zyedidia/highlight v0.0.0-20200217010119-291680feaca1
 	google.golang.org/grpc v1.69.2
-	google.golang.org/protobuf v1.36.0
+	google.golang.org/protobuf v1.36.1
 )
 
 require (
@@ -20,6 +20,7 @@ require (
 	atomicgo.dev/schedule v0.1.0 // indirect
 	github.com/biter777/countries v1.7.5 // indirect
 	github.com/containerd/console v1.0.3 // indirect
+	github.com/elliotchance/orderedmap/v2 v2.6.0 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
@@ -42,8 +43,8 @@ require (
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/term v0.27.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20241219192143-6b3ec007d9bb // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20241219192143-6b3ec007d9bb // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20241223144023-3abc09e42ca8 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20241223144023-3abc09e42ca8 // indirect
 	gopkg.in/yaml.v2 v2.2.5 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

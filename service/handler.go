@@ -10,7 +10,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/func-it/go/logi"
-	"github.com/func-it/go/types"
+	"github.com/func-it/go/protos"
 	"github.com/func-it/speech-to-text/pkg/audioConverter"
 	"github.com/func-it/speech-to-text/pkg/format"
 	"github.com/func-it/speech-to-text/pkg/speechtotext"
@@ -37,7 +37,7 @@ func (a *SpeechToTextService) Ping(_ context.Context, empty *emptypb.Empty) (*em
 	return empty, nil
 }
 
-func (a *SpeechToTextService) SpeechToText(ctx context.Context, req *types.SpeechToTextRequest) (*types.SpeechToTextResponse, error) {
+func (a *SpeechToTextService) SpeechToText(ctx context.Context, req *protos.SpeechToTextRequest) (*protos.SpeechToTextResponse, error) {
 	// XXX TODO : AddCandidates validation in proto file
 	rawAudio := req.Data
 	sourceExtension := strings.ToLower(req.GetSourceExtension())
@@ -62,7 +62,7 @@ func (a *SpeechToTextService) SpeechToText(ctx context.Context, req *types.Speec
 		return nil, logi.ErrorfNWrapNReturn(err, "cannot get text from audio : %v", err)
 	}
 
-	return &types.SpeechToTextResponse{
+	return &protos.SpeechToTextResponse{
 		Text: text,
 	}, nil
 }
