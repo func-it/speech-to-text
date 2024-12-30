@@ -43,23 +43,23 @@ func (a *SpeechToTextService) SpeechToText(ctx context.Context, req *protos.Spee
 	sourceExtension := strings.ToLower(req.GetSourceExtension())
 
 	if len(rawAudio) == 0 {
-		return nil, logi.ErrorNReturn(status.Errorf(codes.FailedPrecondition, "raw audio is empty..."))
+		return nil, logi.ErrorNReturn(ctx, status.Errorf(codes.FailedPrecondition, "raw audio is empty..."))
 	}
 
 	if sourceExtension != format.FfmpegInputFormat {
-		return nil, logi.ErrorNReturn(status.Errorf(codes.FailedPrecondition, "source extension is not %s", format.FfmpegInputFormat))
+		return nil, logi.ErrorNReturn(ctx, status.Errorf(codes.FailedPrecondition, "source extension is not %s", format.FfmpegInputFormat))
 	}
 
 	rawAudioReader := bytes.NewReader(rawAudio)
 
 	rawAudioConvertedReader, err := audioConverter.ConvertAudio(ctx, rawAudioReader, sourceExtension, format.FfmpegOutputFormat)
 	if err != nil {
-		return nil, logi.ErrorfNWrapNReturn(err, "cannot convert audio : %v", err)
+		return nil, logi.ErrorfNWrapNReturn(ctx, err, "cannot convert audio : %v", err)
 	}
 
 	text, err := a.speechToText.GetTextFromMp3AudioMessage(ctx, rawAudioConvertedReader)
 	if err != nil {
-		return nil, logi.ErrorfNWrapNReturn(err, "cannot get text from audio : %v", err)
+		return nil, logi.ErrorfNWrapNReturn(ctx, err, "cannot get text from audio : %v", err)
 	}
 
 	return &protos.SpeechToTextResponse{
