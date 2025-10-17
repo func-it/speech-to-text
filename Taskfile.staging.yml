@@ -5,4 +5,4 @@ vars:
 tasks:
   upgrade:
     desc: SSH into the staging server and upgrade the speech-to-text service
-    cmd: ssh ubuntu@staging.com 'cd ~/plum && task upgrade-speech-to-text'
+    cmd: ssh ubuntu@staging.com 'cd ~/sogenio && task upgrade-speech-to-text'
