@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.5
 FROM --platform=${BUILDPLATFORM:-linux/arm64} tonistiigi/xx AS xx
 
-FROM --platform=${BUILDPLATFORM:-linux/arm64} golang:1.23.2-alpine3.19 AS builder
+FROM --platform=${BUILDPLATFORM:-linux/arm64} golang:1.24.5-alpine3.21 AS builder
 
 COPY --from=xx / /
 

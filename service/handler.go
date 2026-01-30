@@ -46,8 +46,8 @@ func (a *SpeechToTextService) SpeechToText(ctx context.Context, req *protos.Spee
 		return nil, logi.ErrorNReturn(ctx, status.Errorf(codes.FailedPrecondition, "raw audio is empty..."))
 	}
 
-	if sourceExtension != format.FfmpegInputFormat {
-		return nil, logi.ErrorNReturn(ctx, status.Errorf(codes.FailedPrecondition, "source extension is not %s", format.FfmpegInputFormat))
+	if !format.SupportedInputFormats[sourceExtension] {
+		return nil, logi.ErrorNReturn(ctx, status.Errorf(codes.FailedPrecondition, "unsupported audio format: %s", sourceExtension))
 	}
 
 	rawAudioReader := bytes.NewReader(rawAudio)

@@ -35,8 +35,8 @@ func IsFFMpegAvailable() error {
 
 // XXX TODO : Use context to stop the ffmpeg command if it takes too long to execute
 func ConvertAudio(ctx context.Context, rawAudio io.Reader, sourceExtension string, targetExtension string) (io.Reader, error) {
-	if sourceExtension != format.FfmpegInputFormat {
-		return nil, fmt.Errorf("only %s extension is supported, got %s", format.FfmpegInputFormat, sourceExtension)
+	if !format.SupportedInputFormats[sourceExtension] {
+		return nil, fmt.Errorf("unsupported audio format: %s", sourceExtension)
 	}
 
 	if targetExtension != format.FfmpegOutputFormat {
